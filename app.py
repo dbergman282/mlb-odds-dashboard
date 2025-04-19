@@ -21,6 +21,7 @@ def numeric_slider(df, column, label):
 def load_game_odds():
     url = "https://www.dropbox.com/scl/fi/yzjy8pwhlvxf45ccr92a4/all_game_odds.csv?rlkey=u3wz73ngkdu6ng74hbi2tstb4&dl=1"
     df = pd.read_csv(url)
+    df = df[df["market"] != "spreads"]
     df = df.rename(columns={"matchup_folder": "Game"})
     df["ROI (%)"] = df["roi"] * 100
     cols = [
