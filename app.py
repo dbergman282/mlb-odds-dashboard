@@ -92,6 +92,7 @@ st.header("Batter Props")
 st.sidebar.markdown("---")
 st.sidebar.header("Batter Props Filters")
 
+game_selected_batter = st.sidebar.multiselect("Game (Batter)", sorted(df_batter["Game"].unique()), default=[])
 player_names = sorted(df_batter["player_name"].dropna().unique())
 selected_players = st.sidebar.multiselect("Player Name (Batter)", player_names, default=[])
 
@@ -102,6 +103,8 @@ roi_range_batter = numeric_slider(df_batter, "ROI (%)", "ROI (%) Range (Batter)"
 kelly_range_batter = numeric_slider(df_batter, "kelly", "Kelly Range (Batter)")
 
 filtered_batter = df_batter.copy()
+if game_selected_batter:
+    filtered_batter = filtered_batter[filtered_batter["Game"].isin(game_selected_batter)]
 if selected_players:
     filtered_batter = filtered_batter[filtered_batter["player_name"].isin(selected_players)]
 if bookmaker_batter:
@@ -123,6 +126,7 @@ st.header("Pitcher Props")
 st.sidebar.markdown("---")
 st.sidebar.header("Pitcher Props Filters")
 
+game_selected_pitcher = st.sidebar.multiselect("Game (Pitcher)", sorted(df_pitcher["Game"].unique()), default=[])
 player_names_pitcher = sorted(df_pitcher["player_name"].dropna().unique())
 selected_players_pitcher = st.sidebar.multiselect("Player Name (Pitcher)", player_names_pitcher, default=[])
 
@@ -133,6 +137,8 @@ roi_range_pitcher = numeric_slider(df_pitcher, "ROI (%)", "ROI (%) Range (Pitche
 kelly_range_pitcher = numeric_slider(df_pitcher, "kelly", "Kelly Range (Pitcher)")
 
 filtered_pitcher = df_pitcher.copy()
+if game_selected_pitcher:
+    filtered_pitcher = filtered_pitcher[filtered_pitcher["Game"].isin(game_selected_pitcher)]
 if selected_players_pitcher:
     filtered_pitcher = filtered_pitcher[filtered_pitcher["player_name"].isin(selected_players_pitcher)]
 if bookmaker_pitcher:
