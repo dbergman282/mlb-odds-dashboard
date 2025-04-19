@@ -4,6 +4,10 @@ import pandas as pd
 st.set_page_config(page_title="MLB Odds Dashboard", layout="wide")
 st.title("MLB Web Odds Viewer")
 
+# === Refresh Button ===
+if st.sidebar.button("🔄 Refresh All Data"):
+    st.cache_data.clear()
+
 # === Helper: Numeric Slider ===
 def numeric_slider(df, column, label):
     min_val = float(df[column].min())
