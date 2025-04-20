@@ -26,10 +26,10 @@ def load_game_odds():
     url = "https://www.dropbox.com/scl/fi/yzjy8pwhlvxf45ccr92a4/all_game_odds.csv?rlkey=u3wz73ngkdu6ng74hbi2tstb4&dl=1"
     df = pd.read_csv(url)
     df = df[df["market"] != "spreads"]
-    df = df.rename(columns={"matchup_folder": "Game"})
+    df = df.rename(columns={"matchup_folder": "Game", "price": "Decimal Odds"})
     df["ROI (%)"] = df["roi"] * 100
     cols = [
-        "Game", "last_modified", "bookmaker", "market", "name", "price",
+        "Game", "last_modified", "bookmaker", "market", "name", "Decimal Odds",
         "americanOdds", "point", "away_or_home", "prob_hit", "prob_push",
         "ROI (%)", "kelly"
     ]
@@ -40,11 +40,11 @@ def load_game_odds():
 def load_batter_props():
     url = "https://www.dropbox.com/scl/fi/za45vwhyl8nbtqgfpqu45/analyzed_batter_prop_df.csv?rlkey=aohu3pvszy3s1f8b6hyj6buvm&dl=1"
     df = pd.read_csv(url)
-    df = df.rename(columns={"matchup_folder": "Game"})
+    df = df.rename(columns={"matchup_folder": "Game", "price": "Decimal Odds"})
     df["ROI (%)"] = df["roi"] * 100
     cols = [
         "Game", "last_modified", "player_id", "player_name", "bookmaker", "market",
-        "name", "point", "price", "prob", "ROI (%)", "kelly"
+        "name", "point", "Decimal Odds", "prob", "ROI (%)", "kelly"
     ]
     return df[cols]
 
@@ -53,11 +53,11 @@ def load_batter_props():
 def load_pitcher_props():
     url = "https://www.dropbox.com/scl/fi/jxwanz1h6ki5g0cx3zi5p/analyzed_pitcher_prop_df.csv?rlkey=9bebuvrznodi810tobu6o1ov8&dl=1"
     df = pd.read_csv(url)
-    df = df.rename(columns={"matchup_folder": "Game"})
+    df = df.rename(columns={"matchup_folder": "Game", "price": "Decimal Odds"})
     df["ROI (%)"] = df["roi"] * 100
     cols = [
         "Game", "last_modified", "player_id", "player_name", "bookmaker", "market",
-        "name", "point", "price", "prob", "ROI (%)", "kelly"
+        "name", "point", "Decimal Odds", "prob", "ROI (%)", "kelly"
     ]
     return df[cols]
 
