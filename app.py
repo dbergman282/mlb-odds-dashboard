@@ -61,6 +61,14 @@ def load_pitcher_props():
     ]
     return df[cols]
 
+# === Load Player DFS Summary ===
+@st.cache_data
+def load_player_dfs_summary():
+    url = "https://www.dropbox.com/scl/fi/x6nlu8z4orxmg4pft4u52/player_dfs_summary.csv?rlkey=uq9biujytslhfk5edmp0qwrya&dl=1"
+    df = pd.read_csv(url)
+    df = df.rename(columns={"game_key": "Game", "player_id": "Player ID"})
+    return df
+
 # === SECTION 1: Game Odds ===
 df_game = load_game_odds()
 st.header("All Game Odds")
@@ -157,3 +165,42 @@ filtered_pitcher = filtered_pitcher[
 ]
 
 st.dataframe(filtered_pitcher, use_container_width=True)
+
+# === SECTION 4: Player DFS Summary ===
+df_dfs_summary = load_player_dfs_summary()
+st.header("Player DFS Summary Stats")
+
+st.sidebar.markdown("---")
+st.sidebar.header("Player DFS Filters")
+
+game_selected_dfs = st.sidebar.multiselect(
+    "Game (DFS)", sorted(df_dfs_summary["Game"].dropna().unique()), default=[]
+)
+
+name_selected_dfs = st.sidebar.multiselect(
+    "Player Name (DFS)", sorted(df_dfs_summary["roster_fullName"].dropna().unique()), default=[]
+)
+
+position_selected = st.sidebar.multiselect(
+    "Roster Position", sorted(df_dfs_summary["roster_rosterPosition"].dropna().unique()), default=[]
+)
+
+mean_range = numeric_slider(df_dfs_summary, "dfs_mean", "Mean DFS Points")
+sd_range = numeric_slider(df_dfs_summary, "dfs_sd", "Standard Deviation (DFS)")
+q95_range = numeric_slider(df_dfs_summary, "dfs_q95", "95th Percentile (DFS)")
+
+filtered_dfs_summary = df_dfs_summary.copy()
+if game_selected_dfs:
+    filtered_dfs_summary = filtered_dfs_summary[filtered_dfs_summary["Game"].isin(game_selected_dfs)]
+if name_selected_dfs:
+    filtered_dfs_summary = filtered_dfs_summary[filtered_dfs_summary["roster_fullName"].isin(name_selected_dfs)]
+if position_selected:
+    filtered_dfs_summary = filtered_dfs_summary[filtered_dfs_summary["roster_rosterPosition"].isin(position_selected)]
+
+filtered_dfs_summary = filtered_dfs_summary[
+    filtered_dfs_summary["dfs_mean"].between(*mean_range) &
+    filtered_dfs_summary["dfs_sd"].between(*sd_range) &
+    filtered_dfs_summary["dfs_q95"].between(*q95_range)
+]
+
+st.dataframe(filtered_dfs_summary, use_container_width=True)
