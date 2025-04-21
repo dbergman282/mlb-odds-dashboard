@@ -204,3 +204,20 @@ filtered_dfs_summary = filtered_dfs_summary[
 ]
 
 st.dataframe(filtered_dfs_summary, use_container_width=True)
+
+
+# === SECTION 5: Historical Tables ===
+st.header("📊 Historical Props Summary")
+
+# Batter Prop History
+@st.cache_data
+def load_batter_prop_history():
+    url = "https://www.dropbox.com/scl/fi/cb3hcmjmd2q36x6jeisbc/batter_props_history.csv?rlkey=zr6d53mf2p7n1nh8udu1vfus9&dl=1"
+    df = pd.read_csv(url)
+    df = df.rename(columns={"matchup_folder": "Game"})
+    return df
+
+st.subheader("🧾 Batter Prop History")
+df_batter_history = load_batter_prop_history()
+st.dataframe(df_batter_history, use_container_width=True)
+
