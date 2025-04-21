@@ -244,8 +244,8 @@ def display_summary(df, label):
     kelly_wagered = df["kelly_wagered"].sum()
     kelly_returned = df["kelly_returned"].sum()
 
-    flat_roi = (flat_returned / flat_wagered) * 100 if flat_wagered != 0 else 0
-    kelly_roi = (kelly_returned / kelly_wagered) * 100 if kelly_wagered != 0 else 0
+    flat_roi = ((flat_returned -flat_wagered) / flat_wagered) * 100 if flat_wagered != 0 else 0
+    kelly_roi = ((kelly_returned -kelly_wagered )/ kelly_wagered) * 100 if kelly_wagered != 0 else 0
 
     st.subheader(label)
     st.dataframe(df, use_container_width=True)
