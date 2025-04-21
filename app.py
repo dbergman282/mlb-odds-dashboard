@@ -205,7 +205,6 @@ filtered_dfs_summary = filtered_dfs_summary[
 
 st.dataframe(filtered_dfs_summary, use_container_width=True)
 
-
 # === SECTION 5: Historical Props Tables ===
 st.header("📊 Historical Props Summary")
 
@@ -238,16 +237,33 @@ def load_batter_prop_history():
     df = df.rename(columns={"matchup_folder": "Game"})
     return df
 
-# === Displays in desired order ===
-st.subheader("💰 Money Line History")
-st.dataframe(load_moneyline_history(), use_container_width=True)
+# === Summary helper ===
+def display_summary(df, label):
+    flat_wagered = df["flat_wagered"].sum()
+    flat_returned = df["flat_returned"].sum()
+    kelly_wagered = df["kelly_wagered"].sum()
+    kelly_returned = df["kelly_returned"].sum()
 
-st.subheader("📏 Totals History")
-st.dataframe(load_totals_history(), use_container_width=True)
+    flat_roi = (flat_returned / flat_wagered) * 100 if flat_wagered != 0 else 0
+    kelly_roi = (kelly_returned / kelly_wagered) * 100 if kelly_wagered != 0 else 0
 
-st.subheader("🧾 Pitcher Prop History")
-st.dataframe(load_pitcher_prop_history(), use_container_width=True)
+    st.subheader(label)
+    st.dataframe(df, use_container_width=True)
 
-st.subheader("🧾 Batter Prop History")
-st.dataframe(load_batter_prop_history(), use_container_width=True)
+    st.markdown(f"""
+    **Summary Stats**  
+    - 💵 Flat Wagered: `${flat_wagered:,.2f}`  
+    - 💰 Flat Returned: `${flat_returned:,.2f}`  
+    - 📈 Flat ROI: `{flat_roi:.2f}%`  
+    - 📊 Kelly Wagered: `${kelly_wagered:,.2f}`  
+    - 📥 Kelly Returned: `${kelly_returned:,.2f}`  
+    - 🧠 Kelly ROI: `{kelly_roi:.2f}%`  
+    """)
+
+# === Display in desired order ===
+display_summary(load_moneyline_history(), "💰 Money Line History")
+display_summary(load_totals_history(), "📏 Totals History")
+display_summary(load_pitcher_prop_history(), "🧾 Pitcher Prop History")
+display_summary(load_batter_prop_history(), "🧾 Batter Prop History")
+
 
