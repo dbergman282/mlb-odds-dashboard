@@ -205,8 +205,8 @@ filtered_dfs_summary = filtered_dfs_summary[
 
 st.dataframe(filtered_dfs_summary, use_container_width=True)
 
-# === SECTION 5: Historical Props Tables ===
-st.header("📊 Historical Props Summary")
+# === SECTION 5: Historical Performance Tables ===
+st.header("📊 Historical Performance Summary")
 
 # === Loaders ===
 @st.cache_data
