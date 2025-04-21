@@ -206,10 +206,31 @@ filtered_dfs_summary = filtered_dfs_summary[
 st.dataframe(filtered_dfs_summary, use_container_width=True)
 
 
-# === SECTION 5: Historical Tables ===
+# === SECTION 5: Historical Props Tables ===
 st.header("📊 Historical Props Summary")
 
-# Batter Prop History
+# === Loaders ===
+@st.cache_data
+def load_moneyline_history():
+    url = "https://www.dropbox.com/scl/fi/9c6yytlcptsmxs347djo4/h2h_history.csv?rlkey=1gsyk16pxenx9u6kgz1iv4ids&dl=1"
+    df = pd.read_csv(url)
+    df = df.rename(columns={"matchup_folder": "Game"})
+    return df
+
+@st.cache_data
+def load_totals_history():
+    url = "https://www.dropbox.com/scl/fi/y2k5gibruaewxdpj0ki4m/totals_history.csv?rlkey=tj5whl98vpnazi2zg8boq5cpp&dl=1"
+    df = pd.read_csv(url)
+    df = df.rename(columns={"matchup_folder": "Game"})
+    return df
+
+@st.cache_data
+def load_pitcher_prop_history():
+    url = "https://www.dropbox.com/scl/fi/szyc69sfsyb7i4wnh4n0y/pitcher_props_history.csv?rlkey=slt1nezpfnx8yazliymabinje&dl=1"
+    df = pd.read_csv(url)
+    df = df.rename(columns={"matchup_folder": "Game"})
+    return df
+
 @st.cache_data
 def load_batter_prop_history():
     url = "https://www.dropbox.com/scl/fi/cb3hcmjmd2q36x6jeisbc/batter_props_history.csv?rlkey=zr6d53mf2p7n1nh8udu1vfus9&dl=1"
@@ -217,7 +238,16 @@ def load_batter_prop_history():
     df = df.rename(columns={"matchup_folder": "Game"})
     return df
 
+# === Displays in desired order ===
+st.subheader("💰 Money Line History")
+st.dataframe(load_moneyline_history(), use_container_width=True)
+
+st.subheader("📏 Totals History")
+st.dataframe(load_totals_history(), use_container_width=True)
+
+st.subheader("🧾 Pitcher Prop History")
+st.dataframe(load_pitcher_prop_history(), use_container_width=True)
+
 st.subheader("🧾 Batter Prop History")
-df_batter_history = load_batter_prop_history()
-st.dataframe(df_batter_history, use_container_width=True)
+st.dataframe(load_batter_prop_history(), use_container_width=True)
 
